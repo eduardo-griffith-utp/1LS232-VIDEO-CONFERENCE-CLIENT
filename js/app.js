@@ -1,19 +1,21 @@
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('App', () => ({
+        mode: "light",
+        view: "files",
         userName: null,
         room: null,
         roomName: null,
-        channel: null,
+
         video: true,
         audio: true,
-        mode: "light",
+
+        message: "",
+
         streamList: [],
         chats: [],
-        view: "call",
         files: [],
         notes: [],
-        message: "",
         toggleMode() {
             if (this.mode == "light") {
                 this.mode = "dark";
@@ -34,8 +36,8 @@ document.addEventListener('alpine:init', () => {
                         self.chats.push(json);
                         break;
                     case "file":
-                        self.chats.push(json)
-                        self.files.push(json.file)
+                        self.chats.push(json);
+                        self.files.push(json.file);
                         break
                 }
             });

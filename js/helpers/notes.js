@@ -1,29 +1,29 @@
 class NotesHelper {
-    constructor() {
-        this.notes = [];
-        this.nextId = 1;
-    }
-
-    add(note) {
+    static async add(note) {
         return "12345"; 
     }
 
-    delete(noteId) {
+    static async edit(note) {
+        return true;
+    }
+
+    static async delete(noteId) {
         return true; 
     }
 
-    getList(roomCode) {
-        return
-        [
-            "sender",{
-                "name": "XYZ",
-                "picture": "images/avatar.jpeg"
+    static async getList(roomCode) {
+        return [
+            {
+                "sender": {
+                    "name": "XYZ",
+                    "picture": "images/avatar.jpeg"
 
-            },
-              "content",{
-                "message": "XYZ",
-                "color": "#000"
-              }
+                },
+                "content": {
+                    "message": "XYZ",
+                    "color": "#000"
+                }
+            }
         ]
     }
 }

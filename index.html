@@ -4,23 +4,14 @@
 	<link href="https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap" rel="stylesheet" />
 	<link href="css/style.css" rel="stylesheet" />
 	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-	<script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+	<script type="text/javascript" src="https://cdn.apirtc.com/apiRTC/apiRTC-latest.min.js"></script>
+	<script type="text/javascript" src="https://cdn.ably.com/lib/ably.min-1.js"></script>
 
-	<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
-
-
+	<script type="text/javascript" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 </head>
 
 <body x-data="App" x-bind:class="mode">
-
-
-
-
-
-
-
-
 	<div class="waiting-room-container" x-show="!room">
 		<div class="access-container">
 			<div class="access-box">
@@ -110,9 +101,10 @@
 			</div>
 
 			<div class="files-wrapper" x-show="view === 'files'">
+				FILES
 			</div>
 			<div class="notes-wrapper" x-show="view === 'notes'">
-
+				NOTES
 			</div>
 			<div class="video-call-actions ">
 				<button class="video-action-button mic" @click="toggleAudio"></button>
@@ -194,13 +186,17 @@
 			</svg>
 		</button>
 	</div>
-	<script type="text/javascript" src="https://cdn.apirtc.com/apiRTC/apiRTC-latest.min.js"></script>
+	
+
 	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/classes/note.js"></script>
 
 	<script type="text/javascript" src="js/helpers/ably.js"></script>
 	<script type="text/javascript" src="js/helpers/apiRTC.js"></script>
 	<script type="text/javascript" src="js/helpers/storage.js"></script>
-	<script src="js/classes/note.js"></script>
+	<script type="text/javascript" src="js/helpers/database.js"></script>
+	<script type="text/javascript" src="js/helpers/notes.js"></script>
+
 	<script type="text/javascript" src="js/app.js"></script>
 </body>
 
