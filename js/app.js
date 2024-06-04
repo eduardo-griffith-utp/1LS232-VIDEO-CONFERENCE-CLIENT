@@ -1,4 +1,5 @@
 
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('App', () => ({
         userName: null,
@@ -63,3 +64,5 @@ document.addEventListener('alpine:init', () => {
         }
     }))
 });
+
+firebase.initialize(CONFIG.Firebase);
