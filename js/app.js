@@ -10,6 +10,7 @@ document.addEventListener('alpine:init', () => {
         mode: "light",
         streamList: [],
         chats: [],
+        view: "call",
         message: "",
         toggleMode(){
             if (this.mode == "light") {
