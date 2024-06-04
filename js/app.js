@@ -62,4 +62,14 @@ document.addEventListener('alpine:init', () => {
             ApiRTCHelper.toggleVideo();
         }
     }))
+
+    window.ondragover = function(event) {
+        event.preventDefault();
+    };
+     
+    window.ondrop = function(event) {
+        event.preventDefault();
+        const files = event.dataTransfer.files;
+        console.log(files);
+    };
 });
