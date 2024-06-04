@@ -78,7 +78,7 @@
 				</div>
 			</div>
 			<div class="app-main">
-				<div class="video-call-wrapper">
+				<div class="video-call-wrapper" x-show="view === 'call'">
 					<div class="video-participant">
 						<a href="#" class="name-tag">Andy Will</a>
 						<div id="publisher-container" class="stream-video-container">
@@ -94,9 +94,9 @@
 					</template>
 				</div>
 
-				<div class="files-wrapper">
+				<div class="files-wrapper" x-show="view === 'files'">
 				</div>
-				<div class="notes-wrappe">
+				<div class="notes-wrapper" x-show="view === 'notes'">
 
 				</div>
 				<div class="video-call-actions ">
