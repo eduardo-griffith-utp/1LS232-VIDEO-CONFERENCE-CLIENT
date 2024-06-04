@@ -5,11 +5,29 @@ class DatabaseHelper {
     }
 
     static async getChats(roomCode) {
-        return [];
+        const chats = [
+            {
+                action: "chat",
+                message: "Hello World",
+                sender: {
+                    name: "John Doe",
+                    picture: "images/avatar.jpeg"
+                }
+            },
+            {
+                action: "chat",
+                message: "How are you?",
+                sender: {
+                    name: "Jane Doe",
+                    picture: "images/avatar2.jpeg"
+                }
+            }
+        ];
+        return chats.filter(chat => chat.roomCode === roomCode);
     }
 
     static async addNote(note) {
-        return true;
+        return "12345"
     }
 
     static async editNote(note) {
@@ -17,11 +35,33 @@ class DatabaseHelper {
     }
 
     static async deleteNote(noteId) {
-        return "testId's";
+        return true;
     }
 
     static async getNotes(roomCode) {
-        return [];
+        const notes = [
+            {
+                sender: {
+                    name: "John Doe",
+                    picture: "images/avatar.jpeg"
+                },
+                content: {
+                    message: "This is a note",
+                    color: "#000"
+                }
+            },
+            {
+                sender: {
+                    name: "Jane Doe",
+                    picture: "images/avatar2.jpeg"
+                },
+                content: {
+                    message: "This is another note",
+                    color: "#f00"
+                }
+            }
+        ];
+        return notes.filter(note => note.roomCode === roomCode);
     }
 }
 
