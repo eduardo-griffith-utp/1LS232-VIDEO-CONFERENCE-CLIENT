@@ -23,7 +23,7 @@ class DatabaseHelper {
                 }
             }
         ];
-        return chats.filter(chat => chat.roomCode === roomCode);
+        return chats;
     }
 
     static async addNote(note) {
@@ -61,7 +61,7 @@ class DatabaseHelper {
                 }
             }
         ];
-        return notes.filter(note => note.roomCode === roomCode);
+        return notes;
     }
 }
 
