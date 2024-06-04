@@ -11,8 +11,3 @@ class CallActions {
         alert (message || "To be implement")
     }
 }
-
-const viewModel = {
-    CallActions: new CallActions()
-
-};

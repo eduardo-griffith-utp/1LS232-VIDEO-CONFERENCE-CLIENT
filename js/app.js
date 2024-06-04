@@ -2,7 +2,7 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('App', () => ({
         mode: "light",
-        view: "files",
+        view: "call",
         userName: null,
         room: null,
         roomName: null,
@@ -16,6 +16,9 @@ document.addEventListener('alpine:init', () => {
         chats: [],
         files: [],
         notes: [],
+
+        CallActions: new CallActions(),
+
         toggleMode() {
             if (this.mode == "light") {
                 this.mode = "dark";
