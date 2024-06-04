@@ -65,4 +65,4 @@ document.addEventListener('alpine:init', () => {
     }))
 });
 
-firebase.initialize(CONFIG.Firebase);
+firebase.initializeApp(CONFIG.firebase);
