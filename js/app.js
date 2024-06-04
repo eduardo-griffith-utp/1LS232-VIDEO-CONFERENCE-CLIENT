@@ -5,6 +5,7 @@ document.addEventListener('alpine:init', () => {
         room: null,
         roomName: null,
         channel: null,
+        audio: true,
         mode: "light",
         streamList: [],
         chats: [],
