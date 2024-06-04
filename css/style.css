@@ -136,7 +136,7 @@
     margin-top: 32px;
   }
   
-  .nav-link:hover svg {
+  .nav-link.active svg {
     color: #3d42df;
   }
   

@@ -5,12 +5,16 @@ document.addEventListener('alpine:init', () => {
         room: null,
         roomName: null,
         channel: null,
+        video: true,
         audio: true,
         mode: "light",
         streamList: [],
         chats: [],
+        view: "call",
+        files: [],
+        notes: [],
         message: "",
-        toggleMode(){
+        toggleMode() {
             if (this.mode == "light") {
                 this.mode = "dark";
             } else {
@@ -21,31 +25,38 @@ document.addEventListener('alpine:init', () => {
             let self = this;
             this.room = this.roomName;
             this.roomName = null;
-            
+
             await AblyHelper.connect(this.room, (message) => {
                 console.log('Received a message in realtime: ' + message.data)
                 var json = JSON.parse(message.data);
-                switch(json.action) {
+                switch (json.action) {
                     case "chat":
                         self.chats.push(json);
                         break;
+                    case "file":
+                        self.chats.push(json)
+                        self.files.push(json.file)
+                        break
                 }
             });
 
-            
+
             await ApiRTCHelper.connect(
                 this.room,
                 (streamInfo) => {
-                    this.streamList.push(streamInfo);
+                    this.streamList.push({
+                        user: this.userName,
+                        streamInfo
+                    });
                 },
                 (stream) => {
-                    this.streamList = this.streamList.filter(x => x.streamId != stream.streamId);
+                    this.streamList = this.streamList.filter(x => x.streamInfo.streamId != stream.streamId);
                 }
-            );            
+            );
         },
         async sendMessage() {
             console.log("publishing: " + this.message + " ...");
-            AblyHelper.send({ 
+            AblyHelper.send({
                 "action": "chat",
                 "message": this.message,
                 "sender": {
@@ -56,19 +67,19 @@ document.addEventListener('alpine:init', () => {
 
             this.message = '';
         },
-        toggleAudio(){
+        toggleAudio() {
             ApiRTCHelper.toggleAudio();
         },
-        toggleVideo(){
+        toggleVideo() {
             ApiRTCHelper.toggleVideo();
         }
     }))
 
-    window.ondragover = function(event) {
+    window.ondragover = function (event) {
         event.preventDefault();
     };
-     
-    window.ondrop = function(event) {
+
+    window.ondrop = function (event) {
         event.preventDefault();
         const files = event.dataTransfer.files;
         console.log(files);
