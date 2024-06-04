@@ -10,6 +10,7 @@ document.addEventListener('alpine:init', () => {
         chats: [],
         view: "call",
         files: [],
+        notes: [],
         message: "",
         toggleMode(){
             if (this.mode == "light") {
