@@ -17,7 +17,7 @@ class DatabaseHelper {
     }
 
     static async deleteNote(noteId) {
-        return "testId";
+        return "testId's";
     }
 
     static async getNotes(roomCode) {
