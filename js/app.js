@@ -1,4 +1,5 @@
 
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('App', () => ({
         mode: "light",
@@ -79,6 +80,7 @@ document.addEventListener('alpine:init', () => {
             ApiRTCHelper.toggleVideo();
         }
     }))
+});
 
     window.ondragover = function (event) {
         event.preventDefault();
@@ -90,3 +92,5 @@ document.addEventListener('alpine:init', () => {
         console.log(files);
     };
 });
+
+firebase.initializeApp(CONFIG.Firebase);
