@@ -1,5 +1,5 @@
 
-class Storagehelper{
+class StorageHelper{
 
   static getFiles(path){
 

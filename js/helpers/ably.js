@@ -15,19 +15,27 @@ class AblyHelper {
         await this.channel.subscribe(callback);
     }
 
-    static send(data) {
+    static async send(data) {
         if (!this.channel) {
             console.error('You must connect to a room before sending data.');
             return;
         }
-
+    
         const message = JSON.stringify(data);
-        this.channel.publish(this.room, message, (err) => {
-            if (err) {
-                console.error('Error sending message:', err);
-            } else {
-                console.log('Message sent:', message);
-            }
-        });
-    }
+    
+        try {
+            await new Promise((resolve, reject) => {
+                this.channel.publish(this.room, message, (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+            console.log('Message sent:', message);
+        } catch (err) {
+            console.error('Error sending message:', err);
+        }
+    }    
 }

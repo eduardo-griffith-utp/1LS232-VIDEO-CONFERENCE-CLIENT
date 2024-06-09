@@ -24,7 +24,7 @@ class ApiRTCHelper {
             this.conversation.on('streamListChanged', (streamInfo) => {
                 // Cuando se agrega un nuevo stream Y el stream agregado no es local
                 if (streamInfo.listEventType === 'added' && streamInfo.isRemote === true) {
-                    onStreamAdded(streamInfo);
+                    // onStreamAdded(streamInfo);
 
                     // Suscribirse a los eventos del nuevo stream (desencadenados por el objeto conversación)
                     self.conversation.subscribeToMedia(streamInfo.streamId).then((stream) => {
@@ -34,10 +34,12 @@ class ApiRTCHelper {
             });
 
             // Cada vez que se agrega un stream (suscrito) a la conversación
-            this.conversation.on('streamAdded', (stream) => {
-                console.log(stream);
-                // Agregar un elemento de video en el div 'remote', con el streamId en su atributo id
-                stream.addInDiv('remote-' + stream.streamId, 'remote-media-' + stream.streamId, {}, false);
+            this.conversation.on('streamAdded', async (stream) => {
+                await onStreamAdded(stream);
+                window.setTimeout(() => {
+                    // Agregar un elemento de video en el div 'remote', con el streamId en su atributo id
+                    stream.addInDiv('remote-' + stream.streamId, 'remote-media-' + stream.streamId, {}, false);
+                }, 1000)
             });
 
             // Cada vez que se elimina un stream (suscrito) de la conversación
@@ -57,7 +59,7 @@ class ApiRTCHelper {
 
             // Obtener el stream de la cámara local
             this.localStream = await this.userAgent.createStream(streamOptions);
-            
+
             // Mostrar el stream (audio+video) en el elemento <video> con id 'publisher-video'
             var element = document.getElementById('publisher-video');
             this.localStream.attachToElement(element);
