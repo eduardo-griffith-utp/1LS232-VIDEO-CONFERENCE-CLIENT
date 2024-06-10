@@ -7,8 +7,9 @@ const App = {
     room: null,
     roomName: null,
 
-    video: true,
-    audio: true,
+    videoOn: true, 
+    audioOn: true,
+
 
     message: "",
 
@@ -83,10 +84,14 @@ const App = {
         }
         await AblyHelper.send(chat);
     },
+   
+
     toggleAudio() {
+        this.audioOn = !this.audioOn;
         ApiRTCHelper.toggleAudio();
     },
     toggleVideo() {
+        this.videoOn = !this.videoOn; 
         ApiRTCHelper.toggleVideo();
     }
 };
