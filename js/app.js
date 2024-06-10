@@ -7,8 +7,11 @@ const App = {
     room: null,
     roomName: null,
 
+  
+
     videoOn: true, 
     audioOn: true,
+
 
 
     message: "",
@@ -84,7 +87,7 @@ const App = {
         }
         await AblyHelper.send(chat);
     },
-   
+ 
 
     toggleAudio() {
         this.audioOn = !this.audioOn;
