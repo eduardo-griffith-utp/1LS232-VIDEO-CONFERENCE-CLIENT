@@ -9,8 +9,8 @@ const App = {
 
   
 
-    videoOn: true, 
-    audioOn: true,
+    video: true, 
+    audio: true,
 
 
 
@@ -90,11 +90,11 @@ const App = {
  
 
     toggleAudio() {
-        this.audioOn = !this.audioOn;
+        this.audio = !this.audio;
         ApiRTCHelper.toggleAudio();
     },
     toggleVideo() {
-        this.videoOn = !this.videoOn; 
+        this.video = !this.video; 
         ApiRTCHelper.toggleVideo();
     }
 };
