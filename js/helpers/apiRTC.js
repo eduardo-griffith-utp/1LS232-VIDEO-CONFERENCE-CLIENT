@@ -117,9 +117,9 @@ class ApiRTCHelper {
         }
     }
     static leaveConversation() {
-        conversation.leave()
+        this.conversation.leave()
             .then(() => {
-                conversation.destroy();
+                this.conversation.destroy();
             });
     }
 }
