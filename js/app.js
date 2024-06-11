@@ -96,6 +96,16 @@ const App = {
     toggleVideo() {
         this.video = !this.video; 
         ApiRTCHelper.toggleVideo();
+    },
+
+    upload(file){
+        const result = StorageHelper.upload(file, `${this.room/file.name}`)
+        if(result) {
+            this.sendChat({
+                "action": "file",
+                "file": `${this.room/file.name}`
+            })
+        }
     }
 };
 
@@ -110,7 +120,10 @@ window.ondragover = function (event) {
 window.ondrop = async function (event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
-    console.log(files);
+    for (const file of files) {
+        upload(file)
+    }
 };
 
 firebase.initializeApp(CONFIG.Firebase);
+
