@@ -99,7 +99,7 @@ const App = {
     },
 
     upload(file){
-        const path = this.room/file.name
+        const path = `${this.room}/${file.name}`
         const result = StorageHelper.upload(file, path)
         if(result) {
             this.sendChat({
@@ -122,7 +122,7 @@ window.ondrop = async function (event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
     for (const file of files) {
-        upload(file)
+        App.upload(file)
     }
 };
 
