@@ -87,7 +87,7 @@ const App = {
         }
         
         //almacenando el chat 
-        await DatabaseHelper.saveChat();
+        await DatabaseHelper.saveChat(chat);
         await AblyHelper.send(chat);
     },
  
