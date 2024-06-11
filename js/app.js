@@ -85,10 +85,12 @@ const App = {
             "name": this.userName,
             "picture": "images/avatar.jpeg"
         }
+        
+        //almacenando el chat 
+        await DatabaseHelper.saveChat();
         await AblyHelper.send(chat);
     },
  
-
     toggleAudio() {
         this.audio = !this.audio;
         ApiRTCHelper.toggleAudio();
