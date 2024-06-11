@@ -10,11 +10,10 @@ class CallActions {
     leaveConversation(value) {
         if (value) {
             const exit = confirm('Da ok, si desear salir de la sesion')
-            if (exit) {
-                ApiRTCHelper.leaveConversation()
+            if (!exit) {
+                return
             }
-        }else{
-            ApiRTCHelper.leaveConversation()
         }
+        ApiRTCHelper.leaveConversation()
     }
 }
