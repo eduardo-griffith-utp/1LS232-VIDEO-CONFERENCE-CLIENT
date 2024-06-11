@@ -4,34 +4,32 @@ class DatabaseHelper {
         return true;
     }
 
-    static async getChats(roomCode) {
-        const chats = [
-            {
-                action: "chat",
-                message: "Hello World",
-                sender: {
-                    name: "John Doe",
-                    picture: "images/avatar.jpeg"
-                }
-            },
-            {
-                action: "file",
-                file: "12345/test.txt",
-                sender: {
-                    name: "John Doe",
-                    picture: "images/avatar.jpeg"
-                }   
-            },
-            {
-                action: "chat",
-                message: "How are you?",
-                sender: {
-                    name: "Jane Doe",
-                    picture: "images/avatar2.jpeg"
-                }
+    static getChats(roomCode) {
+        return new Promise((resolve, reject) => {
+            
+            if (roomCode === undefined) {
+                reject(new Error("roomCode is undefined"));
+                return;
             }
-        ];
-        return chats;
+
+            const databaseRef = firebase.database().ref('chats');
+
+            databaseRef.orderByChild('room').equalTo(roomCode).once('value')
+                .then((snapshot) => {
+                    const chats = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const chatData = childSnapshot.val();
+                        const chatId = childSnapshot.key;
+                        const chatWithId = { ...chatData, id: chatId };
+                        chats.push(chatWithId);
+                    });
+                    resolve(chats);
+                })
+                .catch((error) => {
+                    console.error("Error getting chats:", error);
+                    reject(error); 
+                });
+        });
     }
 
     static async addNote(note) {
