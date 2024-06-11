@@ -126,14 +126,16 @@ const App = {
     },
 
     upload(file){
-        const result = StorageHelper.upload(file, `${this.room/file.name}`)
+        const path = `${this.room}/${file.name}`
+        const result = StorageHelper.upload(file, path)
         if(result) {
             this.sendChat({
                 "action": "file",
-                "file": `${this.room/file.name}`
+                "file": path
             })
         }
     }
+
 };
 
 document.addEventListener('alpine:init', () => {
@@ -148,7 +150,7 @@ window.ondrop = async function (event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
     for (const file of files) {
-        upload(file)
+        App.upload(file)
     }
 };
 

@@ -19,8 +19,7 @@ class StorageHelper{
     });
   }
 
-  static upload(file, path, progress_callback) {
-  
+  static upload(file, path, progress_callback) {  
     return true
   }
 
