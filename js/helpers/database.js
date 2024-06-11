@@ -41,7 +41,8 @@ class DatabaseHelper {
                     console.log(newNoteRef.key);
                     resolve(newNoteRef.key);
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.log(error);
                     reject(error);
                 });
             });
