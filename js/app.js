@@ -36,6 +36,14 @@ const App = {
         this.room = this.roomName;
         this.roomName = null;
 
+
+        try {
+            this.notes = await NotesHelper.getList(this.room);
+        } catch (error) {
+            console.error('Error fetching notes:', error);
+            this.notes = []; 
+        }
+
         await AblyHelper.connect(this.room, (message) => {
             console.log('Received a message in realtime: ' + message.data)
             var json = JSON.parse(message.data);
