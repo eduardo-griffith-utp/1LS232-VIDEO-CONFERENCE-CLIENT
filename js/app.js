@@ -85,9 +85,11 @@ const App = {
             "name": this.userName,
             "picture": "images/avatar.jpeg"
         }
+        chat.room = this.room;
+        await AblyHelper.send(chat);
+
         //almacenando el chat 
         await DatabaseHelper.saveChat(chat);
-        await AblyHelper.send(chat);
     },
  
     toggleAudio() {

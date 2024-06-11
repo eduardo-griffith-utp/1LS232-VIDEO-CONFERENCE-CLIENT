@@ -1,7 +1,6 @@
 
 class DatabaseHelper {
     static async saveChat(chat) {
-        return true;
         return new Promise((resolve, reject) => {
             const databaseRef = firebase.database().ref('chats');
             const newChatRef = databaseRef.push();
