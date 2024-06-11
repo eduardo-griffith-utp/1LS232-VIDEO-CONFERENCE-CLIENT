@@ -172,10 +172,12 @@
 										</g>
 									</svg>
 								</div>
-								<div class="file-info">
-									<div class="file-name">NewYear.sketch</div>
-									<div class="file-size">120 MB</div>
-								</div>
+								<template x-for="file in files" :key="file.name">
+									<div>
+											<p><strong>Nombre del archivo:</strong> <span x-text="file.name"></span></p>
+											<p><strong>Tamaño del archivo:</strong> <span x-text="formatFileSize(file.size)"></span></p>
+									</div>
+							</template>
 							</div>
 						</div>
 					</div>
