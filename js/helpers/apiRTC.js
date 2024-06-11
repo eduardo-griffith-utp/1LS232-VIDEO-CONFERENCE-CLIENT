@@ -9,14 +9,14 @@ class ApiRTCHelper {
     static async connect(room, onStreamAdded, onStreamRemoved) {
         let self = this;
         this.room = room;
-        
+
         try {
             this.userAgent = new apiRTC.UserAgent({ uri: 'apiKey:' + CONFIG.apiRTC.apiKey })
 
             this.session = await this.userAgent.register({
                 cloudUrl: CONFIG.apiRTC.cloudUrl
             });
-                
+
             // Preparar conexión a la conversación
             this.conversation = this.session.getOrCreateConversation(this.room);
 
@@ -63,13 +63,13 @@ class ApiRTCHelper {
             // Mostrar el stream (audio+video) en el elemento <video> con id 'publisher-video'
             var element = document.getElementById('publisher-video');
             this.localStream.attachToElement(element);
-            
+
             // Unirse a la conversación
             await this.conversation.join();
-            
+
             // Publicar el stream local en la conversación
             await this.conversation.publish(this.localStream);
-        
+
         } catch (error) {
             console.error('Error durante la conexión:', error);
         }
@@ -114,6 +114,17 @@ class ApiRTCHelper {
         } else {
             console.error('No hay stream local disponible para verificar el estado del video.');
             return false;
+        }
+    }
+
+    static leaveConversation() {
+
+        const exit = confirm("Presiona Ok si quieres salir de la sesion");
+        if (exit) {
+            conversation.leave()
+                .then(() => {
+                    conversation.destroy();
+                });
         }
     }
 }
