@@ -109,6 +109,22 @@ const App = {
         ApiRTCHelper.toggleVideo();
     },
 
+    async leaveConversation(prompt) {
+        if (prompt) {
+            const exit = confirm('Da ok, si deseas salir de la sesion')
+            if (!exit) {
+                return false;
+            }
+        }
+
+        await this.CallActions.leaveConversation();
+        this.files = [];
+        this.chats = [];
+        this.notes = [];
+        this.room = null;
+        this.userName = null;
+    },
+
     upload(file){
         const result = StorageHelper.upload(file, `${this.room/file.name}`)
         if(result) {
