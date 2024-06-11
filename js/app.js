@@ -121,6 +121,7 @@ window.ondrop = async function (event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
     for (const file of files) {
+        
         upload(file)
     }
 };
