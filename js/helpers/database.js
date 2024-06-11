@@ -79,30 +79,32 @@ class DatabaseHelper {
         });
     }
 
-    static async getNotes(roomCode) {
-        const notes = [
-            {
-                sender: {
-                    name: "John Doe",
-                    picture: "images/avatar.jpeg"
-                },
-                content: {
-                    message: "This is a note",
-                    color: "#000"
-                }
-            },
-            {
-                sender: {
-                    name: "Jane Doe",
-                    picture: "images/avatar2.jpeg"
-                },
-                content: {
-                    message: "This is another note",
-                    color: "#f00"
-                }
+    static getNotes(roomCode) {
+        return new Promise((resolve, reject) => {
+            if (!roomCode || typeof roomCode !== 'string') {
+                return reject(new Error("roomCode is undefined or not a string"));
             }
-        ];
-        return notes;
+
+            const databaseRef = firebase.database().ref('notes');
+
+            databaseRef.orderByChild('room').equalTo(roomCode).once('value')
+                .then(snapshot => {
+                    const notes = [];
+                    snapshot.forEach(childSnapshot => {
+                        const noteData = childSnapshot.val();
+                        const note = {
+                            sender: noteData.sender,
+                            content: noteData.content   
+                        };
+                        notes.push(note);
+                    });
+                    resolve(notes);
+                })
+                .catch(error => {
+                    console.error("Error getting notes:", error);
+                    reject(error);
+                });
+        });
     }
 }
 
