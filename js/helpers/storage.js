@@ -1,9 +1,22 @@
 
 class StorageHelper{
 
-  static getFiles(path){
-
-  return ["uploads/file1.txt", "uploads/file2.jpg", "uploads/file3.pdf"];
+  static getFiles(path) {
+    return new Promise((resolve, reject) => {
+      
+      const storageRef = firebase.storage().ref(path);
+  
+      storageRef.listAll()
+        .then(res => {
+        
+          const files = res.items.map(itemRef => itemRef.fullPath);
+          resolve(files);
+        })
+        .catch(error => {
+         
+          reject(error);
+        });
+    });
   }
 
   static upload(file, path, progress_callback) {
