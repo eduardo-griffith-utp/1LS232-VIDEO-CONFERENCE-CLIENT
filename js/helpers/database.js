@@ -1,7 +1,21 @@
+import firebase from 'firebase/app';
+import 'firebase/database';
 
 class DatabaseHelper {
     static async saveChat(chat) {
-        return true;
+        return new Promise((resolve, reject) => {
+            const databaseRef = firebase.database().ref('chats');
+            const newChatRef = databaseRef.push();
+            newChatRef.set(chat)
+                .then(() => {
+                    console.log('Chat key:', newChatRef.key);
+                    resolve(newChatRef.key);
+                })
+                .catch((error) => {
+                    console.error('Error guardando chat:', error);
+                    reject(error);
+                });
+        });
     }
 
     static async getChats(roomCode) {
