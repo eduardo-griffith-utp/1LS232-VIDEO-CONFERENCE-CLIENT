@@ -46,8 +46,20 @@ class DatabaseHelper {
     }
 
     static async addNote(note) {
-        return "12345"
-    }
+        return new Promise((resolve, reject) => {
+            const databaseRef = firebase.database().ref("notes");
+            const newNoteRef = databaseRef.push();
+            newNoteRef.set(note)
+                .then(() => {
+                    console.log(newNoteRef.key);
+                    resolve(newNoteRef.key);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                });
+            });
+        };
 
     static async editNote(note) {
         return true; 
