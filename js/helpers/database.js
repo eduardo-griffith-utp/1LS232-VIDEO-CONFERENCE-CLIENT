@@ -53,8 +53,18 @@ class DatabaseHelper {
         return true; 
     }
 
-    static async deleteNote(noteId) {
-        return true;
+    static deleteNote(noteId) {
+        return new Promise((resolve, reject) => {
+            const noteRef = firebase.database().ref('notes').child(noteId);
+
+            noteRef.remove()
+                .then(() => {
+                    resolve(true);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
     }
 
     static async getNotes(roomCode) {
