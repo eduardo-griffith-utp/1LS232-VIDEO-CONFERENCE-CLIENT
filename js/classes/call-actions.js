@@ -7,7 +7,10 @@ class CallActions {
         return Math.random < 0.5;
     }
 
-    leaveConversation () {
-        ApiRTCHelper.leaveConversation()
+    leaveConversation(message) {
+        const exit = confirm(message)
+        if (exit) {
+            ApiRTCHelper.leaveConversation()
+        }
     }
 }
