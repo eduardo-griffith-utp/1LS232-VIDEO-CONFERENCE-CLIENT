@@ -85,7 +85,6 @@ const App = {
             "name": this.userName,
             "picture": "images/avatar.jpeg"
         }
-        
         //almacenando el chat 
         await DatabaseHelper.saveChat(chat);
         await AblyHelper.send(chat);
