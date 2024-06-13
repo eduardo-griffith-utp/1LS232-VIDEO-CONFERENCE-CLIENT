@@ -76,10 +76,11 @@ const App = {
         await this.sendChat({
             "action": "chat",
             "message": this.message,            
-        });
+        }); 
         this.message = '';
     },
 
+    
     async sendChat(chat) {
         chat.sender = {
             "name": this.userName,
