@@ -96,6 +96,16 @@ const App = {
     toggleVideo() {
         this.video = !this.video; 
         ApiRTCHelper.toggleVideo();
+    },
+
+    download(filePath) {
+        const downloadUrl = StorageHelper.download(filePath);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filePath.split('/').pop();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 };
 
@@ -114,3 +124,4 @@ window.ondrop = async function (event) {
 };
 
 firebase.initializeApp(CONFIG.Firebase);
+
