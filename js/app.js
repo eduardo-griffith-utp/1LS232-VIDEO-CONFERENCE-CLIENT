@@ -36,6 +36,14 @@ const App = {
         this.room = this.roomName;
         this.roomName = null;
 
+
+        try {
+            this.notes = await NotesHelper.getList(this.room);
+        } catch (error) {
+            console.error('Error fetching notes:', error);
+            this.notes = []; 
+        }
+
         await AblyHelper.connect(this.room, (message) => {
             console.log('Received a message in realtime: ' + message.data)
             var json = JSON.parse(message.data);
@@ -85,9 +93,12 @@ const App = {
             "name": this.userName,
             "picture": "images/avatar.jpeg"
         }
+        chat.room = this.room;
         await AblyHelper.send(chat);
-    },
 
+        //almacenando el chat 
+        await DatabaseHelper.saveChat(chat);
+    },
 
     toggleAudio() {
         this.audio = !this.audio;
@@ -98,18 +109,37 @@ const App = {
         ApiRTCHelper.toggleVideo();
     },
 
-    upload(file) {
-        const result = StorageHelper.upload(file, `${this.room / file.name}`)
-        if (result) {
+
+    async leaveConversation(prompt) {
+        if (prompt) {
+            const exit = confirm('Da ok, si deseas salir de la sesion')
+            if (!exit) {
+                return false;
+            }
+        }
+
+        await this.CallActions.leaveConversation();
+        this.files = [];
+        this.chats = [];
+        this.notes = [];
+        this.room = null;
+        this.userName = null;
+    },
+
+    upload(file){
+        const path = `${this.room}/${file.name}`
+        const result = StorageHelper.upload(file, path)
+        if(result) {
             this.sendChat({
                 "action": "file",
-                "file": `${this.room / file.name}`
+                "file": path
             })
         }
     },
     goHome() {
         this.CallActions.leaveConversation(false)
     }
+
 };
 
 document.addEventListener('alpine:init', () => {
@@ -124,7 +154,7 @@ window.ondrop = async function (event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
     for (const file of files) {
-        upload(file)
+        App.upload(file)
     }
 };
 
