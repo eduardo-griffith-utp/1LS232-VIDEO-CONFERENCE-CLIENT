@@ -88,6 +88,7 @@ const App = {
         this.message = '';
     },
 
+    
     async sendChat(chat) {
         chat.sender = {
             "name": this.userName,
@@ -109,6 +110,15 @@ const App = {
         ApiRTCHelper.toggleVideo();
     },
 
+    download(filePath) {
+        const downloadUrl = StorageHelper.download(filePath);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filePath.split('/').pop();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    },
 
     async leaveConversation(prompt) {
         if (prompt) {
