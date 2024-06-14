@@ -85,6 +85,7 @@ class ApiRTCHelper {
         } else {
             console.error('No local stream available to toggle audio.');
         }
+        return this.isAudioEnabled();
     }
 
     static toggleVideo() {
@@ -97,6 +98,7 @@ class ApiRTCHelper {
         } else {
             console.error('No local stream available to toggle video.');
         }
+        return this.isVideoEnabled();
     }
 
     static isAudioEnabled() {

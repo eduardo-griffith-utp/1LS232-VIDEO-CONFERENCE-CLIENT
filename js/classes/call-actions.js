@@ -1,13 +1,13 @@
 class CallActions {
     toggleAudio() {
-        return Math.random() < 0.5;
+        return ApiRTCHelper.toggleAudio();
     }
 
     toggleVideo() {
-        return Math.random < 0.5;
+        return ApiRTCHelper.toggleVideo();
     }
 
     async leaveConversation() {
-       await ApiRTCHelper.leaveConversation();   
+        await ApiRTCHelper.leaveConversation();   
     }
 }
