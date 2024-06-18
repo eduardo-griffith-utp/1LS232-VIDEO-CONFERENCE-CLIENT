@@ -29,7 +29,6 @@ class StorageHelper {
         });
     });
 
-
   }
 
 
