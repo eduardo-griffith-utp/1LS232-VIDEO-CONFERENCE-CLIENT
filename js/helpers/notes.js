@@ -4,9 +4,10 @@ class NotesHelper {
     }
 
     static async edit(note) {
-        return true;
+            const result = await DatabaseHelper.editNote(note);
+            return result;
     }
-
+    
     static async delete(noteId) {
         return true; 
     }
@@ -26,4 +27,5 @@ class NotesHelper {
             }
         ]
     }
+
 }
