@@ -150,6 +150,16 @@ const App = {
         this.CallActions.leaveConversation(false)
     }
 
+    async deleteNote(noteId){
+        if(await NotesHelper.delete(noteId)){
+            await AblyHelper.send({
+            "action": "delete-note",
+            "id": noteId
+        }
+        )
+        }
+    }
+
 };
 
 document.addEventListener('alpine:init', () => {
