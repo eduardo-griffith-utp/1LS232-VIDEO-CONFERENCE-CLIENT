@@ -1,4 +1,3 @@
-
 const App = {
     mode: "light",
     view: "call",
@@ -7,12 +6,8 @@ const App = {
     room: null,
     roomName: null,
 
-  
-
     video: true, 
     audio: true,
-
-
 
     message: "",
 
@@ -54,7 +49,13 @@ const App = {
                 case "file":
                     self.chats.push(json); 
                     self.files.push(json.file);
-                    break
+                    break;
+                case "edit-note":
+                    const noteIndex = self.notes.findIndex(note => note.id === json.note.id);
+                    if (noteIndex !== -1) {
+                        self.notes[noteIndex] = json.note;
+                    }
+                    break;
             }
         });
 
@@ -87,7 +88,6 @@ const App = {
         }
         await AblyHelper.send(chat);
     },
- 
 
     toggleAudio() {
         this.audio = !this.audio;
@@ -99,12 +99,22 @@ const App = {
     },
 
     upload(file){
-        const result = StorageHelper.upload(file, `${this.room/file.name}`)
+        const result = StorageHelper.upload(file, `${this.room}/file.name`)
         if(result) {
             this.sendChat({
                 "action": "file",
-                "file": `${this.room/file.name}`
+                "file": `${this.room}/file.name`
             })
+        }
+    },
+
+    async editNote(note) {
+        const result = await NotesHelper.edit(note);
+        if (result) {
+            await AblyHelper.send({
+                "action": "edit-note",
+                "note": note
+            });
         }
     }
 };
@@ -126,4 +136,3 @@ window.ondrop = async function (event) {
 };
 
 firebase.initializeApp(CONFIG.Firebase);
-
