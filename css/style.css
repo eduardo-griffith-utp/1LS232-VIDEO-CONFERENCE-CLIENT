@@ -369,14 +369,17 @@
     align-items: center;
   }
   
-  .video-call-wrapper {
-    width: 100%;
-    height: 100%;
+  .video-call-wrapper{
     border-radius: 16px;
-    overflow: hidden;
-    display: flex;
-    flex-wrap: wrap;
   }
+
+ .video-call-wrapper, .files-wrapper, .notes-wrapper {
+   width: 100%;
+   height: 100%;
+   overflow: hidden;
+   display: flex;
+   flex-wrap: wrap;
+ }
   
   .video-participant {
     width: 50%;

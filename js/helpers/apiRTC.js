@@ -85,6 +85,7 @@ class ApiRTCHelper {
         } else {
             console.error('No local stream available to toggle audio.');
         }
+        return this.isAudioEnabled();
     }
 
     static toggleVideo() {
@@ -97,6 +98,7 @@ class ApiRTCHelper {
         } else {
             console.error('No local stream available to toggle video.');
         }
+        return this.isVideoEnabled();
     }
 
     static isAudioEnabled() {
@@ -116,10 +118,12 @@ class ApiRTCHelper {
             return false;
         }
     }
-    static leaveConversation() {
-        this.conversation.leave()
-            .then(() => {
-                this.conversation.destroy();
-            });
+    static async leaveConversation() {
+        this.conversation.unpublish(this.localStream);
+        this.conversation.leave();
+        this.localStream.data.getTracks().forEach((track) => {
+            track.stop();
+        });
+        await this.session.disconnect()
     }
 }

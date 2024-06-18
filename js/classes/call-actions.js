@@ -1,19 +1,13 @@
 class CallActions {
     toggleAudio() {
-        return Math.random() < 0.5;
+        return ApiRTCHelper.toggleAudio();
     }
 
     toggleVideo() {
-        return Math.random < 0.5;
+        return ApiRTCHelper.toggleVideo();
     }
 
-    leaveConversation(value) {
-        if (value) {
-            const exit = confirm('Da ok, si desear salir de la sesion')
-            if (!exit) {
-                return
-            }
-        }
-        ApiRTCHelper.leaveConversation()
+    async leaveConversation() {
+        await ApiRTCHelper.leaveConversation();   
     }
 }
