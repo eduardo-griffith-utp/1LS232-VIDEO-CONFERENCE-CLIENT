@@ -44,10 +44,8 @@ class StorageHelper{
     });
   }
 
-  static download (file, path) {
-
+  static download(file, path) {
     return "https://google.com";
-  }
-
+  }
 }
 
