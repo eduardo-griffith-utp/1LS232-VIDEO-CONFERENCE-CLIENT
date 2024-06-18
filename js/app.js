@@ -36,9 +36,9 @@ const App = {
         this.room = this.roomName;
         this.roomName = null;
 
-
         try {
             this.notes = await NotesHelper.getList(this.room);
+            this.files = await StorageHelper.getFiles(this.room);
         } catch (error) {
             console.error('Error fetching notes:', error);
             this.notes = []; 
@@ -62,7 +62,9 @@ const App = {
                 case "file":
                     self.chats.push(json);
                     self.files.push(json.file);
-                    break
+
+                    break;
+
             }
         });
 
