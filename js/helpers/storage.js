@@ -2,14 +2,28 @@
 class StorageHelper {
 
   static getFiles(path) {
+    return new Promise((resolve, reject) => {
 
-    return ["uploads/file1.txt", "uploads/file2.jpg", "uploads/file3.pdf"];
+      const storageRef = firebase.storage().ref(path);
+
+      storageRef.listAll()
+        .then(res => {
+
+          const files = res.items.map(itemRef => itemRef.fullPath);
+          resolve(files);
+        })
+        .catch(error => {
+
+          reject(error);
+        });
+    });
   }
+
 
   static upload(file, path, progress_callback) {
-
     return true
   }
+
 
   // Método download
   static download(file, path) {
@@ -30,7 +44,6 @@ class StorageHelper {
     });
 
   }
-
 
 }
 
