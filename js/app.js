@@ -1,4 +1,3 @@
-
 const App = {
     mode: "light",
     view: "call",
@@ -7,12 +6,14 @@ const App = {
     room: null,
     roomName: null,
 
+ p6IfTV0P---EditNotes-branch-update
+    video: true, 
+
 
 
     video: true,
+ main
     audio: true,
-
-
 
     message: "",
 
@@ -62,7 +63,13 @@ const App = {
                 case "file":
                     self.chats.push(json);
                     self.files.push(json.file);
-                    break
+                    break;
+                case "edit-note":
+                    const noteIndex = self.notes.findIndex(note => note.id === json.note.id);
+                    if (noteIndex !== -1) {
+                        self.notes[noteIndex] = json.note;
+                    }
+                    break;
             }
         });
 
@@ -137,6 +144,25 @@ const App = {
     },
 
     upload(file){
+ p6IfTV0P---EditNotes-branch-update
+        const result = StorageHelper.upload(file, `${this.room}/file.name`)
+        if(result) {
+            this.sendChat({
+                "action": "file",
+                "file": `${this.room}/file.name`
+            })
+        }
+    },
+
+    async editNote(note) {
+        const result = await NotesHelper.edit(note);
+        if (result) {
+            await AblyHelper.send({
+                "action": "edit-note",
+                "note": note
+            });
+        }
+
         const path = `${this.room}/${file.name}`
         const result = StorageHelper.upload(file, path)
         if(result) {
@@ -148,6 +174,7 @@ const App = {
     },
     goHome() {
         this.CallActions.leaveConversation(false)
+ main
     }
 
     async deleteNote(noteId){
@@ -179,4 +206,3 @@ window.ondrop = async function (event) {
 };
 
 firebase.initializeApp(CONFIG.Firebase);
-
