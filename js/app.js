@@ -1,4 +1,3 @@
-
 const App = {
     mode: "light",
     view: "call",
@@ -7,12 +6,8 @@ const App = {
     room: null,
     roomName: null,
 
-
-
     video: true,
     audio: true,
-
-
 
     message: "",
 
@@ -31,11 +26,11 @@ const App = {
             this.mode = "light";
         }
     },
+
     async accessRoom() {
         let self = this;
         this.room = this.roomName;
         this.roomName = null;
-
 
         try {
             this.notes = await NotesHelper.getList(this.room);
@@ -62,7 +57,7 @@ const App = {
                 case "file":
                     self.chats.push(json);
                     self.files.push(json.file);
-                    break
+                    break;
             }
         });
 
@@ -80,6 +75,7 @@ const App = {
             }
         );
     },
+
     async sendMessage() {
         await this.sendChat({
             "action": "chat",
@@ -88,7 +84,6 @@ const App = {
         this.message = '';
     },
 
-    
     async sendChat(chat) {
         chat.sender = {
             "name": this.userName,
@@ -97,7 +92,7 @@ const App = {
         chat.room = this.room;
         await AblyHelper.send(chat);
 
-        //almacenando el chat 
+        // Store chat in database
         await DatabaseHelper.saveChat(chat);
     },
 
@@ -105,6 +100,7 @@ const App = {
         this.audio = !this.audio;
         ApiRTCHelper.toggleAudio();
     },
+
     toggleVideo() {
         this.video = !this.video;
         ApiRTCHelper.toggleVideo();
@@ -122,7 +118,7 @@ const App = {
 
     async leaveConversation(prompt) {
         if (prompt) {
-            const exit = confirm('Da ok, si deseas salir de la sesion')
+            const exit = confirm('¿Estás seguro que deseas salir de la sesión?');
             if (!exit) {
                 return false;
             }
@@ -136,30 +132,59 @@ const App = {
         this.userName = null;
     },
 
-    upload(file){
-        const path = `${this.room}/${file.name}`
+    upload(file) {
+        const path = `${this.room}/${file.name}`;
         const result = StorageHelper.upload(file, path)
-        if(result) {
+        if (result) {
             this.sendChat({
                 "action": "file",
                 "file": path
-            })
+            });
         }
     },
+
     goHome() {
-        this.CallActions.leaveConversation(false)
-    }
+        this.CallActions.leaveConversation(false);
+    },
 
-    async deleteNote(noteId){
-        if(await NotesHelper.delete(noteId)){
+    async deleteNote(noteId) {
+        if (await NotesHelper.delete(noteId)) {
             await AblyHelper.send({
-            "action": "delete-note",
-            "id": noteId
+                "action": "delete-note",
+                "id": noteId
+            });
         }
-        )
-        }
-    }
+    },
 
+    addNote(color, message) {
+        // Construct the note object
+        const note = {
+            sender: {
+                name: this.userName,
+                picture: "images/avatar.jpeg"
+            },
+            content: {
+                message: message,
+                color: color
+            }
+        };
+
+        // Call NotesHelper.add method
+        NotesHelper.add(note)
+            .then(noteId => {
+                // If successfully added, send a real-time message
+                if (noteId !== null) {
+                    AblyHelper.send({
+                        action: "add-note",
+                        note: note
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error adding note:', error);
+                // Handle error as needed
+            });
+    }
 };
 
 document.addEventListener('alpine:init', () => {
@@ -174,9 +199,8 @@ window.ondrop = async function (event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
     for (const file of files) {
-        App.upload(file)
+        App.upload(file);
     }
 };
 
 firebase.initializeApp(CONFIG.Firebase);
-
