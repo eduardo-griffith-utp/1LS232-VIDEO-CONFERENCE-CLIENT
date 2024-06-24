@@ -39,9 +39,10 @@ const App = {
 
         try {
             this.notes = await NotesHelper.getList(this.room);
+            this.chats = await DatabaseHelper.getChats(this.room);
+            this.files = await StorageHelper.getFiles(this.room);
         } catch (error) {
-            console.error('Error fetching notes:', error);
-            this.notes = []; 
+            console.error('Error getting room history:', error);
         }
 
         await AblyHelper.connect(this.room, (message) => {
@@ -63,9 +64,24 @@ const App = {
                     self.chats.push(json);
                     self.files.push(json.file);
                     break
+                case "add-note":
+                    this.notes.push(json.note);
+                    break;
+                case "edit-note":
+                    this.notes = this.notes.filter(x => {
+                        if (x.id == json.note.id) {
+                            x.content.message = json.note.content.message
+                        }
+                        return true;
+                    });
+                    break;
+                case "delete-note":
+                    this.notes = this.notes.filter(x => x.id != json.id);
+                    break;
             }
         });
 
+        /*
         await ApiRTCHelper.connect(
             this.room,
             async (stream) => {
@@ -79,6 +95,7 @@ const App = {
                 this.streamList = this.streamList.filter(x => x.streamId != stream.streamId);
             }
         );
+        */
     },
     async sendMessage() {
         await this.sendChat({
@@ -110,10 +127,11 @@ const App = {
         ApiRTCHelper.toggleVideo();
     },
 
-    download(filePath) {
-        const downloadUrl = StorageHelper.download(filePath);
+    async download(filePath) {
+        const downloadUrl = await StorageHelper.download(filePath);
         const link = document.createElement('a');
         link.href = downloadUrl;
+        link.target = "_blank";
         link.download = filePath.split('/').pop();
         document.body.appendChild(link);
         link.click();
@@ -137,7 +155,7 @@ const App = {
     },
 
     upload(file){
-        const path = `${this.room}/${file.name}`
+        const path = `${App.room}/${file.name}`
         const result = StorageHelper.upload(file, path)
         if(result) {
             this.sendChat({
@@ -146,10 +164,74 @@ const App = {
             })
         }
     },
-    goHome() {
-        this.CallActions.leaveConversation(false)
-    }
+    
+    async goHome(){
+        this.leaveConversation(true)
+    },
 
+    newNote() {
+        let id = this.notes.filter(item => !item.hasOwnProperty('id')).length + 1;
+        this.notes.unshift({
+            content: {
+                color:"#000",
+                message: ""
+            },
+            room: this.room,
+            sender: {
+                "name": this.userName,
+                "picture": "images/avatar.jpeg"
+            },
+            edit: true,
+            _id: id
+        });
+
+        window.setTimeout(() => {
+            document.querySelector('#note-' + id).focus();
+        }, 200);
+    },
+
+    async addNote(note) 
+    {
+        this.notes = this.notes.filter(x => x._id != note._id);
+        delete note._id;
+        delete note.edit;
+        const id = await NotesHelper.add(note);
+        if (id) {
+            note.id = id;
+
+            await this.sendChat({
+                "action": "add-note",
+                "note": note
+            });            
+        }
+    },
+
+    async editNote(note) {
+        const editRes = await NotesHelper.edit(note);
+
+        if (editRes === true) {
+            await this.sendChat({
+                "action": "edit-note",
+                "note": note
+            })
+
+            note.edit = false;
+        }
+    },
+
+    async deleteNote(note) {
+        if (note._id) {
+            this.notes = this.notes.filter(x => x._id != note._id);
+        } else {
+            const deleteRes = await NotesHelper.delete(note.id);
+            if (deleteRes === true) {
+                await this.sendChat({
+                    "action": "delete-note",
+                    "id": note.id // id de la nota
+                })
+            }
+        }
+    }
 };
 
 document.addEventListener('alpine:init', () => {

@@ -6,47 +6,43 @@ class DatabaseHelper {
             const newChatRef = databaseRef.push();
             newChatRef.set(chat)
                 .then(() => {
-                    console.log('Chat key:', newChatRef.key);
+                    console.log(newChatRef.key);
                     resolve(newChatRef.key);
                 })
                 .catch((error) => {
-                    console.error('Error guardando chat:', error);
                     reject(error);
                 });
         });
     }
 
-    static getChats(roomCode) {
+    static async getChats(roomCode) {
         return new Promise((resolve, reject) => {
-            
-            if (roomCode === undefined) {
+            if (!roomCode) {
                 reject(new Error("roomCode is undefined"));
                 return;
             }
-
+    
             const databaseRef = firebase.database().ref('chats');
-
             databaseRef.orderByChild('room').equalTo(roomCode).once('value')
                 .then((snapshot) => {
                     const chats = [];
                     snapshot.forEach((childSnapshot) => {
-                        const chatData = childSnapshot.val();
-                        const chatId = childSnapshot.key;
-                        const chatWithId = { ...chatData, id: chatId };
-                        chats.push(chatWithId);
+                        const chat = childSnapshot.val();
+                        chat.id = childSnapshot.key; // Add the ID to the chat
+                        chats.push(chat);
                     });
                     resolve(chats);
                 })
                 .catch((error) => {
                     console.error("Error getting chats:", error);
-                    reject(error); 
+                    reject(error);
                 });
         });
-    }
+    }    
 
     static async addNote(note) {
         return new Promise((resolve, reject) => {
-            const databaseRef = firebase.database().ref("notes");
+            const databaseRef = firebase.database().ref('notes');
             const newNoteRef = databaseRef.push();
             newNoteRef.set(note)
                 .then(() => {
@@ -54,20 +50,27 @@ class DatabaseHelper {
                     resolve(newNoteRef.key);
                 })
                 .catch((error) => {
-                    console.log(error);
                     reject(error);
                 });
-            });
-        };
-
-    static async editNote(note) {
-        return true; 
+        });
     }
 
-    static deleteNote(noteId) {
+    static async editNote(updatedNote) {
+        return new Promise((resolve, reject) => {
+            const noteRef = firebase.database().ref('notes').child(updatedNote.id);
+            noteRef.set(updatedNote)
+                .then(() => {
+                    resolve(true);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    static async deleteNote(noteId) {
         return new Promise((resolve, reject) => {
             const noteRef = firebase.database().ref('notes').child(noteId);
-
             noteRef.remove()
                 .then(() => {
                     resolve(true);
@@ -78,32 +81,28 @@ class DatabaseHelper {
         });
     }
 
-    static getNotes(roomCode) {
+    static async getNotes(roomCode) {
         return new Promise((resolve, reject) => {
-            if (!roomCode || typeof roomCode !== 'string') {
-                return reject(new Error("roomCode is undefined or not a string"));
+            if (!roomCode) {
+                reject(new Error("roomCode is undefined"));
+                return;
             }
-
+    
             const databaseRef = firebase.database().ref('notes');
-
             databaseRef.orderByChild('room').equalTo(roomCode).once('value')
-                .then(snapshot => {
+                .then((snapshot) => {
                     const notes = [];
-                    snapshot.forEach(childSnapshot => {
-                        const noteData = childSnapshot.val();
-                        const note = {
-                            sender: noteData.sender,
-                            content: noteData.content   
-                        };
+                    snapshot.forEach((childSnapshot) => {
+                        const note = childSnapshot.val();
+                        note.id = childSnapshot.key; // Add the ID to the note
                         notes.push(note);
                     });
                     resolve(notes);
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error("Error getting notes:", error);
                     reject(error);
                 });
         });
-    }
+    }    
 }
-

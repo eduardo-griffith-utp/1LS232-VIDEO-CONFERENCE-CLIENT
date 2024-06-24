@@ -1,29 +1,17 @@
 class NotesHelper {
     static async add(note) {
-        return "12345"; 
-    }
-
-    static async edit(note) {
-        return true;
+        return await DatabaseHelper.addNote(note);
     }
 
     static async delete(noteId) {
-        return true; 
+        return await DatabaseHelper.deleteNote(noteId);
     }
-
+  
     static async getList(roomCode) {
-        return [
-            {
-                "sender": {
-                    "name": "XYZ",
-                    "picture": "images/avatar.jpeg"
-
-                },
-                "content": {
-                    "message": "XYZ",
-                    "color": "#000"
-                }
-            }
-        ]
+        return await DatabaseHelper.getNotes(roomCode);
+    }
+  
+    static async edit(note) {
+      return await DatabaseHelper.editNote(note);
     }
 }

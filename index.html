@@ -102,10 +102,51 @@
 			</div>
 
 			<div class="files-wrapper" x-show="view === 'files'">
-				FILES
+				<div class="container">
+					<template x-for="file in files">
+						<div class="item">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.25" width="24" height="24"><defs><style>.cls-637647fac3a86d32eae6f27d-1{fill:none;stroke:currentColor;stroke-miterlimit:10;}</style></defs><rect class="cls-637647fac3a86d32eae6f27d-1" x="7.23" y="11.05" width="5.73" height="6.68"></rect><polygon class="cls-637647fac3a86d32eae6f27d-1" points="12.96 14.86 15.82 17.73 16.77 17.73 16.77 11.04 15.82 11.04 12.96 13.91 12.96 14.86"></polygon><polygon class="cls-637647fac3a86d32eae6f27d-1" points="20.59 6.27 20.59 22.5 3.41 22.5 3.41 1.5 15.82 1.5 20.59 6.27"></polygon><polygon class="cls-637647fac3a86d32eae6f27d-1" points="20.59 6.27 20.59 7.23 14.86 7.23 14.86 1.5 15.82 1.5 20.59 6.27"></polygon></svg>
+							<div class="filename">
+							  <p x-text="file.split('/').pop()"></p>
+							  <!--
+							  <div class="filedata">
+								<span>2 files</span>
+								<span>●</span>
+								<span>30 MB</span>
+							  </div>
+							  -->
+							</div>
+							<button @click="download(file)">Download</button>
+						</div>
+					</template>
+				</div>
 			</div>
 			<div class="notes-wrapper" x-show="view === 'notes'">
-				NOTES
+				<div id="create" @click="newNote">+</div>
+				<template x-for="note in notes">
+					<div class="sticky-note">
+						<textarea x-model="note.content.message" @click="note.edit = true" :id="'note-' + note._id"></textarea>
+						<template x-if="note.edit">
+							<div class="note-actions">
+								<template x-if="!note.id">
+									<button class="add-note-button" @click="addNote(note)">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+									</button>
+								</template>
+	
+								<template x-if="note.id">
+									<button class="edit-note-button" @click="editNote(note)">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+									</button>
+								</template>							
+	
+								<button class="delete-note-button" @click="deleteNote(note)">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+								</button>
+							</div>
+						</template>
+					</div>
+				</template>			
 			</div>
 			
 			<div class="video-call-actions ">
@@ -151,46 +192,50 @@
 			</button>
 			<div class="chat-container">
 				<div class="chat-area">
-					<div class="message-wrapper">
-						<div class="profile-picture">
-							<img
-								src="https://images.unsplash.com/photo-1576110397661-64a019d88a98?ixlib=rb-1.2.1&auto=format&fit=crop&w=1234&q=80"
-								alt="pp">
-						</div>
-						<div class="message-content">
-							<p class="name">Tim Russel</p>
-							<div class="message">New design document⬇️</div>
-							<div class="message-file">
-								<div class="icon sketch">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-										<path fill="#ffd54f" d="M96 191.02v-144l160-30.04 160 30.04v144z" />
-										<path fill="#ffecb3" d="M96 191.02L256 16.98l160 174.04z" />
-										<path fill="#ffa000" d="M0 191.02l256 304 256-304z" />
-										<path fill="#ffca28" d="M96 191.02l160 304 160-304z" />
-										<g fill="#ffc107">
-											<path d="M0 191.02l96-144v144zM416 47.02v144h96z" />
-										</g>
-									</svg>
-								</div>
-								<div class="file-info">
-									<div class="file-name">NewYear.sketch</div>
-									<div class="file-size">120 MB</div>
-								</div>
-							</div>
-						</div>
-					</div>
 					<template x-for="chat in chats">
-						<div class="message-wrapper" :class="(chat.sender.name == userName) ? 'reverse' : ''">
-							<div class="profile-picture">
-								<img :src="chat.sender.picture" alt="pp">
-							</div>
-							<div class="message-content">
-								<p class="name" x-text="chat.sender.name"></p>
-								<div class="message" x-text="chat.message"></div>
-							</div>
+						<div>
+							<template x-if="chat.action == 'chat'">
+								<div class="message-wrapper" :class="(chat.sender.name == userName) ? 'reverse' : ''">
+									<div class="profile-picture">
+										<img :src="chat.sender.picture" alt="pp">
+									</div>
+									<div class="message-content">
+										<p class="name" x-text="chat.sender.name"></p>
+										<div class="message" x-text="chat.message"></div>
+									</div>
+								</div>
+							</template>
+							<template x-if="chat.action == 'file'">
+								<div class="message-wrapper" :class="(chat.sender.name == userName) ? 'reverse' : ''">
+									<div class="profile-picture">
+										<img :src="chat.sender.picture" alt="pp" />
+									</div>
+									<div class="message-content">
+										<p class="name" x-text="chat.sender.name"></p>
+										<!-- <div class="message">New design document⬇️</div> -->
+										<div class="message-file" style="cursor: pointer;" @click="download(chat.file)">
+											<div class="icon sketch">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+													<path fill="#ffd54f" d="M96 191.02v-144l160-30.04 160 30.04v144z" />
+													<path fill="#ffecb3" d="M96 191.02L256 16.98l160 174.04z" />
+													<path fill="#ffa000" d="M0 191.02l256 304 256-304z" />
+													<path fill="#ffca28" d="M96 191.02l160 304 160-304z" />
+													<g fill="#ffc107">
+														<path d="M0 191.02l96-144v144zM416 47.02v144h96z" />
+													</g>
+												</svg>
+											</div>
+											<div class="file-info">
+												<div class="file-name" x-text="chat.file.split('/').pop()"></div>
+												<!-- <div class="file-size">120 MB</div> -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</template>
 						</div>
 					</template>
-				</div>
+				</div>	
 				<div class="chat-typing-area-wrapper">
 					<div class="chat-typing-area">
 						<input type="text" placeholder="Type your meesage..." class="chat-input" x-model="message">
