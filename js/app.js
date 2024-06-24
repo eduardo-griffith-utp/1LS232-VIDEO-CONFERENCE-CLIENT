@@ -1,4 +1,3 @@
-
 const App = {
     mode: "light",
     view: "call",
@@ -7,12 +6,8 @@ const App = {
     room: null,
     roomName: null,
 
-
-
     video: true,
     audio: true,
-
-
 
     message: "",
 
@@ -31,11 +26,11 @@ const App = {
             this.mode = "light";
         }
     },
+
     async accessRoom() {
         let self = this;
         this.room = this.roomName;
         this.roomName = null;
-
 
         try {
             this.notes = await NotesHelper.getList(this.room);
@@ -81,7 +76,6 @@ const App = {
             }
         });
 
-        /*
         await ApiRTCHelper.connect(
             this.room,
             async (stream) => {
@@ -95,8 +89,8 @@ const App = {
                 this.streamList = this.streamList.filter(x => x.streamId != stream.streamId);
             }
         );
-        */
     },
+
     async sendMessage() {
         await this.sendChat({
             "action": "chat",
@@ -105,7 +99,6 @@ const App = {
         this.message = '';
     },
 
-    
     async sendChat(chat) {
         chat.sender = {
             "name": this.userName,
@@ -114,7 +107,7 @@ const App = {
         chat.room = this.room;
         await AblyHelper.send(chat);
 
-        //almacenando el chat 
+        // Store chat in database
         await DatabaseHelper.saveChat(chat);
     },
 
@@ -122,6 +115,7 @@ const App = {
         this.audio = !this.audio;
         ApiRTCHelper.toggleAudio();
     },
+
     toggleVideo() {
         this.video = !this.video;
         ApiRTCHelper.toggleVideo();
@@ -140,7 +134,7 @@ const App = {
 
     async leaveConversation(prompt) {
         if (prompt) {
-            const exit = confirm('Da ok, si deseas salir de la sesion')
+            const exit = confirm('¿Estás seguro que deseas salir de la sesión?');
             if (!exit) {
                 return false;
             }
@@ -157,11 +151,11 @@ const App = {
     upload(file){
         const path = `${App.room}/${file.name}`
         const result = StorageHelper.upload(file, path)
-        if(result) {
+        if (result) {
             this.sendChat({
                 "action": "file",
                 "file": path
-            })
+            });
         }
     },
     
@@ -246,9 +240,8 @@ window.ondrop = async function (event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
     for (const file of files) {
-        App.upload(file)
+        App.upload(file);
     }
 };
 
 firebase.initializeApp(CONFIG.Firebase);
-

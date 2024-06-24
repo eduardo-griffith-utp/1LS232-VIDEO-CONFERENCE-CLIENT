@@ -2,7 +2,7 @@ class NotesHelper {
     static async add(note) {
         return await DatabaseHelper.addNote(note);
     }
-
+    
     static async delete(noteId) {
         return await DatabaseHelper.deleteNote(noteId);
     }
@@ -14,4 +14,5 @@ class NotesHelper {
     static async edit(note) {
       return await DatabaseHelper.editNote(note);
     }
+
 }
