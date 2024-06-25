@@ -226,7 +226,19 @@ const App = {
             }
         }
     }
-};
+},
+
+  async deleteNoteById(noteId) {
+        if (await NotesHelper.delete(noteId)) {
+          return {
+            "action": "delete-note",
+            "id": noteId
+          };
+        } else {
+          return null;
+        }
+      }
+    };
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('App', () => (App))
